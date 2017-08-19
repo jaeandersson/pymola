@@ -342,7 +342,6 @@ class Model:
             der_states = OrderedDict([(s.symbol.name(), s) for s in self.der_states])
             alg_states = OrderedDict([(s.symbol.name(), s) for s in self.alg_states])
             inputs = OrderedDict([(s.symbol.name(), s) for s in self.inputs])
-            outputs = OrderedDict([(s.symbol.name(), s) for s in self.outputs])
 
             all_states = OrderedDict()
             all_states.update(states)
@@ -424,8 +423,6 @@ class Model:
                     fixed = max(fixed, alias_state.fixed)
 
                     del all_states[alias]
-                    if alias in outputs:
-                        outputs[alias].symbol = sign * canonical_state.symbol
 
                 canonical_state.aliases = aliases
                 canonical_state.python_type = python_type
@@ -439,7 +436,6 @@ class Model:
             self.der_states = [v for k, v in all_states.items() if k in der_states]
             self.alg_states = [v for k, v in all_states.items() if k in alg_states]
             self.inputs = [v for k, v in all_states.items() if k in inputs]
-            self.outputs = list(outputs.values())
             self.equations = reduced_equations
 
             if len(self.equations) > 0:
