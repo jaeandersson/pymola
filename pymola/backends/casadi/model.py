@@ -103,7 +103,7 @@ class Model:
                     simple_parameters.append(p)
                 else:
                     symbols.append(p.symbol)
-                    values.append(p.value)   
+                    values.append(p.value)
 
             if len(self.equations) > 0:
                 self.equations = ca.substitute(self.equations, symbols, values)
@@ -198,7 +198,8 @@ class Model:
                 self.equations = ca.substitute(self.equations, symbols, values)
             if len(self.initial_equations) > 0:
                 self.initial_equations = ca.substitute(self.initial_equations, symbols, values)
-            self.parameters = unspecified_parameters
+
+            self.parameters = unspecified_parameters + [Variable(ca.MX.sym('workaround'))]
 
             # Replace parameter values in metadata
             for variable in itertools.chain(self.states, self.alg_states, self.inputs, self.parameters, self.constants):
