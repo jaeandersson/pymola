@@ -458,8 +458,8 @@ class Model:
 
             self.states = [v for k, v in all_states.items() if k in states]
             self.der_states = [v for k, v in all_states.items() if k in der_states]
-            self.alg_states = [v for k, v in all_states.items() if k in alg_states]
-            self.inputs = [v for k, v in all_states.items() if k in inputs]
+            self.alg_states = [v for k, v in all_states.items() if k in alg_states and not v.fixed]
+            self.inputs = [v for k, v in all_states.items() if k in inputs or set(v.aliases).intersection(inputs)]
             self.equations = reduced_equations
 
             if len(self.equations) > 0:
