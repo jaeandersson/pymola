@@ -109,12 +109,14 @@ def _compile_model(model_folder: str, model_name: str, compiler_options: Dict[st
     return model
 
 def _save_model(model_folder: str, model_name: str, model: Model):
-    # Compile shared libraries
+    # Compile shared libraries. Disable all optimizations, as there is very
+    # little to optimize, and using O2 can result in multi-hour long compile
+    # times for larger models.
     if os.name == 'posix':
-        compiler_flags = ['-O2', '-fPIC']
+        compiler_flags = ['-O0', '-fPIC']
         linker_flags = ['-fPIC']
     else:
-        compiler_flags = ['/O2', '/wd4101']  # Shut up unused local variable warnings.
+        compiler_flags = ['/Od', '/wd4101']  # Shut up unused local variable warnings.
         linker_flags = ['/DLL']
 
     objects = {'dae_residual': ObjectData('dae_residual', ''), 'initial_residual': ObjectData('initial_residual', ''), 'variable_metadata': ObjectData('variable_metadata', '')}
